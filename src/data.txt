@@ -19,26 +19,33 @@ CREATE TABLE researcher (
   code VARCHAR(50) NOT NULL,
   college VARCHAR(100),
   title VARCHAR(50),
-  phone VARCHAR(20)
+  phone VARCHAR(20),
+	create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE project (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(200) NOT NULL,
-  type VARCHAR(50),        -- 项目性质（字典）
-  scope VARCHAR(50),       -- 项目范围（字典）
-  leader_id BIGINT,        -- 负责人
-  start_date DATE,
-  end_date DATE
-);
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,     -- 对应 Long id，MyBatis-Plus 自动生成
+    name VARCHAR(255) NOT NULL,               -- 项目名称
+    code VARCHAR(100) NOT NULL,               -- 项目编号
+    type VARCHAR(100),                         -- 项目性质
+    duration VARCHAR(50),                       -- 研究周期
+    leader VARCHAR(100),                        -- 项目负责人
+    description TEXT,                            -- 项目简介
+		create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
 
 CREATE TABLE paper (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(200) NOT NULL,
-  journal VARCHAR(200),
-  source VARCHAR(50),      -- 检索来源（字典）
-  publish_date DATE
-);
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,         -- 论文标题
+    author VARCHAR(100) NOT NULL,        -- 作者
+    journal VARCHAR(255),                -- 期刊名称
+    source VARCHAR(50),                  -- 检索来源
+    publish_date DATE,                   -- 发表时间
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,                     -- 创建时间
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- 修改时间
+)
 
 
 CREATE TABLE paper_researcher (
