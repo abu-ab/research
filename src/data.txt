@@ -1,0 +1,84 @@
+CREATE DATABASE research_manage
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_general_ci;
+
+
+ USE research_manage;
+
+CREATE TABLE sys_user (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(100) NOT NULL,
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE researcher (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  code VARCHAR(50) NOT NULL,
+  college VARCHAR(100),
+  title VARCHAR(50),
+  phone VARCHAR(20)
+);
+
+CREATE TABLE project (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(200) NOT NULL,
+  type VARCHAR(50),        -- 项目性质（字典）
+  scope VARCHAR(50),       -- 项目范围（字典）
+  leader_id BIGINT,        -- 负责人
+  start_date DATE,
+  end_date DATE
+);
+
+CREATE TABLE paper (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(200) NOT NULL,
+  journal VARCHAR(200),
+  source VARCHAR(50),      -- 检索来源（字典）
+  publish_date DATE
+);
+
+
+CREATE TABLE paper_researcher (
+  paper_id BIGINT,
+  researcher_id BIGINT,
+  PRIMARY KEY (paper_id, researcher_id)
+);
+
+
+CREATE TABLE book (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(200),
+  publisher VARCHAR(200),
+  isbn VARCHAR(50),
+  publish_date DATE
+);
+
+
+
+CREATE TABLE book_researcher (
+  book_id BIGINT,
+  researcher_id BIGINT,
+  PRIMARY KEY (book_id, researcher_id)
+);
+
+CREATE TABLE award (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(200),
+  level VARCHAR(50),       -- 奖项级别（字典）
+  award_date DATE,
+  project_id BIGINT
+);
+
+CREATE TABLE dictionary (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  dict_type VARCHAR(100),
+  dict_code VARCHAR(100),
+  dict_label VARCHAR(200),
+  sort INT,
+  status TINYINT DEFAULT 1
+);
+
+
