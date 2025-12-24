@@ -25,67 +25,67 @@ CREATE TABLE researcher (
 );
 
 CREATE TABLE project (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,     -- 对应 Long id，MyBatis-Plus 自动生成
-    name VARCHAR(255) NOT NULL,               -- 项目名称
-    code VARCHAR(100) NOT NULL,               -- 项目编号
-    type VARCHAR(100),                         -- 项目性质
-    duration VARCHAR(50),                       -- 研究周期
-    leader VARCHAR(100),                        -- 项目负责人
-    description TEXT,                            -- 项目简介
-		create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(100) NOT NULL,
+    type VARCHAR(100),
+    duration VARCHAR(50),
+    leader VARCHAR(100),
+    status int,
+    description TEXT,
+	create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )
 
+CREATE TABLE project_researcher (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    project_id BIGINT NOT NULL,
+    researcher_id BIGINT NOT NULL,
+    role VARCHAR(50),
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_project_researcher (project_id, researcher_id)
+);
+
+
 CREATE TABLE paper (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,         -- 论文标题
-    author VARCHAR(100) NOT NULL,        -- 作者
-    journal VARCHAR(255),                -- 期刊名称
-    source VARCHAR(50),                  -- 检索来源
-    publish_date DATE,                   -- 发表时间
-    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,                     -- 创建时间
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- 修改时间
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    journal VARCHAR(255),
+    source VARCHAR(50),
+    publish_date DATE,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )
 
 
-CREATE TABLE paper_researcher (
-  paper_id BIGINT,
-  researcher_id BIGINT,
-  PRIMARY KEY (paper_id, researcher_id)
-);
-
 
 CREATE TABLE book (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(200),
-  publisher VARCHAR(200),
-  isbn VARCHAR(50),
-  publish_date DATE
-);
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+   	name VARCHAR(255) NOT NULL COMMENT '著作名称',
+	author VARCHAR(255) NOT NULL COMMENT '作者（逗号分隔）',
+	publisher VARCHAR(255) COMMENT '出版社',
+	publish_date DATE COMMENT '出版日期',
+	isbn VARCHAR(50) COMMENT 'ISBN',
+	description TEXT COMMENT '简介',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
 
-
-
-CREATE TABLE book_researcher (
-  book_id BIGINT,
-  researcher_id BIGINT,
-  PRIMARY KEY (book_id, researcher_id)
-);
 
 CREATE TABLE award (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(200),
-  level VARCHAR(50),       -- 奖项级别（字典）
-  award_date DATE,
-  project_id BIGINT
-);
+  target_type VARCHAR(20) NOT NULL COMMENT 'PROJECT / ACHIEVEMENT',
+  target_id BIGINT NOT NULL COMMENT '关联对象ID',
 
-CREATE TABLE dictionary (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  dict_type VARCHAR(100),
-  dict_code VARCHAR(100),
-  dict_label VARCHAR(200),
-  sort INT,
-  status TINYINT DEFAULT 1
+  name VARCHAR(255) NOT NULL COMMENT '奖项名称',
+  level VARCHAR(50) COMMENT '奖项级别',
+  award_rank VARCHAR(50) COMMENT '奖项等级',
+  organization VARCHAR(255) COMMENT '授奖单位',
+  award_date DATE COMMENT '获奖时间',
+  description VARCHAR(500) COMMENT '备注',
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
 
