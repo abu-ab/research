@@ -1,26 +1,28 @@
 package org.example.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("project")
-public class Project {
+@TableName("award")
+public class Award {
+
     @TableId(type = IdType.ASSIGN_ID)
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    private String targetType;
+    private Long targetId;
+
     private String name;
-    private String code;
-    private String type;
-    private String duration;
-    private String leader;
+    private String level;
+    private String awardRank;
+    private String organization;
+    private LocalDate awardDate;
     private String description;
-    private Integer status;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 

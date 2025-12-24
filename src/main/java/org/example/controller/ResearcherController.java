@@ -9,8 +9,10 @@ import org.example.service.ResearcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/researcher")
+@RequestMapping("/researcher")
 public class ResearcherController {
     @Autowired
     private ResearcherService researcherService;
@@ -34,6 +36,10 @@ public class ResearcherController {
         return researcherService.page(page, wrapper);
     }
 
+    @GetMapping("/list")
+    public List<Researcher> listAll() {
+        return researcherService.list();
+    }
 
     @PostMapping
     public boolean add(@RequestBody Researcher researcher) {
