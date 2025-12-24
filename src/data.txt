@@ -89,3 +89,50 @@ CREATE TABLE award (
   update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
+CREATE TABLE sys_dict (
+  id BIGINT PRIMARY KEY,
+  dict_type VARCHAR(50) NOT NULL COMMENT '字典类型',
+  dict_code VARCHAR(50) NOT NULL COMMENT '字典编码',
+  dict_label VARCHAR(100) NOT NULL COMMENT '字典显示值',
+  sort INT DEFAULT 0 COMMENT '排序',
+  status TINYINT DEFAULT 1 COMMENT '状态 1启用 0停用',
+  remark VARCHAR(255),
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+
+INSERT INTO sys_dict (id, dict_type, dict_code, dict_label, sort)
+VALUES
+(20, 'AWARD_RANK', 'FIRST',  '一等奖', 1),
+(21, 'AWARD_RANK', 'SECOND', '二等奖', 2),
+(22, 'AWARD_RANK', 'THIRD',  '三等奖', 3);
+
+
+INSERT INTO sys_dict (id, dict_type, dict_code, dict_label, sort)
+VALUES
+(10, 'AWARD_LEVEL', 'NATIONAL', '国家级', 1),
+(11, 'AWARD_LEVEL', 'PROVINCE', '省部级', 2),
+(12, 'AWARD_LEVEL', 'CITY',     '市级',   3),
+(13, 'AWARD_LEVEL', 'SCHOOL',   '校级',   4);
+
+
+INSERT INTO sys_dict (id, dict_type, dict_code, dict_label, sort)
+VALUES
+(1, 'AWARD_TARGET_TYPE', 'PROJECT', '科研项目', 1),
+(2, 'AWARD_TARGET_TYPE', 'PAPER',   '论文',     2),
+(3, 'AWARD_TARGET_TYPE', 'BOOK',    '著作',     3);
+
+
+CREATE TABLE `user` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL UNIQUE COMMENT '用户名',
+  `password` VARCHAR(255) NOT NULL COMMENT '密码（加密）',
+  `nickname` VARCHAR(50) DEFAULT NULL COMMENT '昵称',
+  `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+
