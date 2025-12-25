@@ -1,15 +1,17 @@
 package org.example.controller;
 
+import org.example.dto.UserRegisterDTO;
 import org.example.entity.User;
 import org.example.service.UserService;
+import org.example.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -19,27 +21,46 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        String username = body.get("username");
-        String password = body.get("password");
-        User user = userService.login(username, password);
-        if (user != null) {
-            // 可以生成 token 或 session，这里简化
-            return ResponseEntity.ok(user);
+    public Map<String, Object> login(@RequestBody UserRegisterDTO dto) {
+        User user = userService.getByUsername(dto.getUsername());
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用户名或密码错误");
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("密码错误");
+        }
+
+        String token = JwtUtil.generateToken(user.getUsername());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        map.put("user", user);
+        return map;
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> body) {
-        Long userId = Long.valueOf(body.get("userId"));
+    public boolean changePassword(@RequestBody Map<String, String> body) {
+        // 从 SecurityContext 获取用户名
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
         String oldPassword = body.get("oldPassword");
         String newPassword = body.get("newPassword");
 
-        boolean success = userService.changePassword(userId, oldPassword, newPassword);
-        if (success) return ResponseEntity.ok("修改成功");
-        return ResponseEntity.badRequest().body("原密码错误或用户不存在");
+        return userService.changePasswordByUsername(username, oldPassword, newPassword);
+    }
+
+
+
+    @PostMapping("/register")
+    public boolean register(@RequestBody UserRegisterDTO req) {
+        return userService.register(req.getUsername(), req.getPassword());
     }
 }
 
