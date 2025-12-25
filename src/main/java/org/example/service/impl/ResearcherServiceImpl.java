@@ -10,6 +10,11 @@ import org.example.mapper.ResearcherMapper;
 import org.example.service.ResearcherService;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class ResearcherServiceImpl extends ServiceImpl<ResearcherMapper, Researcher> implements ResearcherService {
 
@@ -31,4 +36,14 @@ public class ResearcherServiceImpl extends ServiceImpl<ResearcherMapper, Researc
 
         return this.page(page, wrapper);
     }
+
+    @Override
+    public List<Researcher> listByIds(List<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return this.baseMapper.selectBatchIds(ids);
+    }
+
+
 }
