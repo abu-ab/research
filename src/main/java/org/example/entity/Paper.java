@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Paper {
     @TableId(type = IdType.ASSIGN_ID)
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+    private String id;
 
     private String title;         // 论文标题
     private String author;        // 作者

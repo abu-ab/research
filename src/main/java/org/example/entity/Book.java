@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Book {
     @TableId(type = IdType.ASSIGN_ID)
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+    private String id;
 
     private String name;
 
