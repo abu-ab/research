@@ -14,4 +14,8 @@ public interface ResearcherService extends IService<Researcher> {
     );
 
     List<Researcher> listByIds(List<String> ids);
+
+    boolean saveResearcher(Researcher researcher);
+
+    boolean updateResearcher(Researcher researcher);
 }

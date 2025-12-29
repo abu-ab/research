@@ -9,7 +9,9 @@ import org.example.service.ResearcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/researcher")
@@ -42,13 +44,32 @@ public class ResearcherController {
     }
 
     @PostMapping
-    public boolean add(@RequestBody Researcher researcher) {
-        return researcherService.save(researcher);
+    public Map<String, Object> add(@RequestBody Researcher researcher) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            researcherService.saveResearcher(researcher);
+            result.put("code", 200);
+            result.put("msg", "新增成功");
+        } catch (RuntimeException e) {
+            result.put("code", 400);
+            result.put("msg", e.getMessage());
+        }
+        return result;
     }
 
     @PutMapping
-    public boolean update(@RequestBody Researcher researcher) {
-        return researcherService.updateById(researcher);
+    public Map<String, Object> update(@RequestBody Researcher researcher) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            researcherService.updateResearcher(researcher);
+            result.put("code", 200);
+            result.put("msg", "新增成功");
+        } catch (RuntimeException e) {
+            result.put("code", 400);
+            result.put("msg", e.getMessage());
+        }
+        return result;
+
     }
 
     @DeleteMapping("/{id}")

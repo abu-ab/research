@@ -46,4 +46,34 @@ public class ResearcherServiceImpl extends ServiceImpl<ResearcherMapper, Researc
     }
 
 
+    @Override
+    public boolean saveResearcher(Researcher researcher) {
+        long count = this.count(
+                new QueryWrapper<Researcher>()
+                        .eq("code", researcher.getCode())
+        );
+
+        if (count > 0) {
+            throw new RuntimeException("科研人员工号已存在");
+        }
+
+        return this.save(researcher);
+    }
+
+    @Override
+    public boolean updateResearcher(Researcher researcher) {
+        long count = this.count(
+                new QueryWrapper<Researcher>()
+                        .eq("code", researcher.getCode())
+                        .ne("id", researcher.getId())
+        );
+
+        if (count > 0) {
+            throw new RuntimeException("科研人员工号已存在");
+        }
+
+        return this.updateById(researcher);
+    }
+
+
 }

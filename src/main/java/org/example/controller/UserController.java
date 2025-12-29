@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.example.dto.UserRegisterDTO;
 import org.example.entity.User;
 import org.example.service.UserService;
@@ -62,5 +63,20 @@ public class UserController {
     public boolean register(@RequestBody UserRegisterDTO req) {
         return userService.register(req.getUsername(), req.getPassword());
     }
+
+    @GetMapping("/page")
+    public IPage<User> page(
+            @RequestParam int pageNum,
+            @RequestParam int pageSize,
+            @RequestParam(required = false) String username) {
+
+        return userService.pageUser(pageNum, pageSize, username);
+    }
+
+    @PostMapping("/role")
+    public boolean updateRole(@RequestBody User user) {
+      return  userService.updateById(user);
+    }
+
 }
 

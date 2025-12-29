@@ -1,6 +1,8 @@
 package org.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.entity.User;
 import org.example.mapper.UserMapper;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -44,6 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String encodedPwd = passwordEncoder.encode(password);
 
         User user = new User();
+        user.setRole("USER");
         user.setUsername(username);
         user.setPassword(encodedPwd);
         user.setCreateTime(LocalDateTime.now());
@@ -87,5 +91,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新新密码
         user.setPassword(passwordEncoder.encode(newPassword));
         return this.updateById(user);
+    }
+
+
+    @Override
+    public IPage<User> pageUser(int pageNum, int pageSize, String username) {
+
+        Page<User> page = new Page<>(pageNum, pageSize);
+
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        if (username != null && !"".equals(username)) {
+            wrapper.like("username", username);
+        }
+
+        return this.page(page, wrapper);
     }
 }
